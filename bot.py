@@ -53,4 +53,4 @@ async def getlines(ctx):
     await ctx.send(embed=embedVar)
 
 
-bot.run('ODU3ODIzODAzNzUyMDU0ODA0.YNVMrA.xPNyVaUDYmzQRkPtIBodCyrtcJU')
+bot.run('')
