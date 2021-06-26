@@ -8,13 +8,23 @@ description = "Basic bot used to connect to MBTA."
 bot = commands.Bot(command_prefix='mbta!', description=description)
 
 def getLinesFunc():
-    lines = requests.get("https://api-v3.mbta.com/lines/?include=routes")
+    lines = requests.get("https://api-v3.mbta.com/routes/")
     linesJson = lines.json()
-    lineNames = []
+    commuter_rail = []
+    metro = []
+    bus = []
     for line in linesJson['data']:
-        lineNames.append(line.get("id"))
+        if line.get("attributes").get("description") == "Commuter Rail":
+            commuter_rail.append(line.get("attributes").get("long_name"))
+        elif line.get("attributes").get("description") == "Rapid Transit":
+            metro.append(line.get("attributes").get("long_name"))
+        elif line.get("attributes").get("description") == "Key Bus":
+            bus.append(line.get("attributes").get("long_name"))
     print(linesJson['data'])
-    return lineNames
+    commuter_rail = "\n".join(commuter_rail)
+    metro = "\n".join(metro)
+    bus = "\n".join(bus)
+    return [commuter_rail,metro,bus]
 
 @bot.event
 async def on_ready():
@@ -30,21 +40,17 @@ async def info(ctx, line):
     direction = data['data']['attributes']['direction_names']
     zipped = list(zip(termini, direction))
     print(zipped)
-    test = "Termini: " + zipped[0][0] + " ("+zipped[0][1]+ ")" + ", " + zipped[1][0] + " ("+zipped[1][1]+")"
+    test = "Termini: " + zipped[0][0] + " ("+zipped[0][1]+ "), " + zipped[1][0] + " ("+zipped[1][1]+")"
     await ctx.send(test)
 
 @bot.command()
 async def getlines(ctx):
-    await ctx.send(getLinesFunc())
-
-    #
-    # embedVar = discord.Embed(title="MBTA Lines", description="All MBTA rail lines", color=0x00ff00)
-    # embedVar.add_field(name="", value="hi", inline=False)
-    # embedVar.add_field(name="Field2", value="hi2", inline=False)
-    # await ctx.send(embed=embedVar)
-
-# @bot.command()
-# async def update:
+    big_list = (getLinesFunc())
+    embedVar = discord.Embed(title="MBTA Lines", description="All MBTA transportation lines", color=0x00ff00)
+    embedVar.add_field(name="Commuter Rail", value=big_list[0], inline=False)
+    embedVar.add_field(name="Metro", value=big_list[1], inline=False)
+    embedVar.add_field(name="Bus", value=big_list[2], inline=False)
+    await ctx.send(embed=embedVar)
 
 
-bot.run('')
+bot.run('ODU3ODIzODAzNzUyMDU0ODA0.YNVMrA.xPNyVaUDYmzQRkPtIBodCyrtcJU')
