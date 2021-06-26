@@ -24,7 +24,7 @@ async def on_ready():
     print('------')
 
 @bot.command()
-async def update(ctx, line):
+async def info(ctx, line):
     data = requests.get("https://api-v3.mbta.com/routes/" + line).json()
     termini = data['data']['attributes']['direction_destinations']
     direction = data['data']['attributes']['direction_names']
@@ -36,6 +36,15 @@ async def update(ctx, line):
 @bot.command()
 async def getlines(ctx):
     await ctx.send(getLinesFunc())
+
+    #
+    # embedVar = discord.Embed(title="MBTA Lines", description="All MBTA rail lines", color=0x00ff00)
+    # embedVar.add_field(name="", value="hi", inline=False)
+    # embedVar.add_field(name="Field2", value="hi2", inline=False)
+    # await ctx.send(embed=embedVar)
+
+# @bot.command()
+# async def update:
 
 
 bot.run('')
