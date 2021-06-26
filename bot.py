@@ -52,5 +52,11 @@ async def getlines(ctx):
     embedVar.add_field(name="Bus", value=big_list[2], inline=False)
     await ctx.send(embed=embedVar)
 
-
-bot.run('')
+@bot.command()
+async def commands(ctx):
+    embedVar = discord.Embed(title="Commands", description="List of all commands", color=0x00ff00)
+    embedVar.add_field(name="info", value="Command to get info about a specific line", inline=False)
+    embedVar.add_field(name="getlines", value="Get a list of all Commuter Rail, Metro, and Buses", inline=False)
+    embedVar.add_field(name="commands", value="Get a list of all commands", inline=False)
+    await ctx.send(embed=embedVar)
+bot.run('ODU3ODIzODAzNzUyMDU0ODA0.YNVMrA.xPNyVaUDYmzQRkPtIBodCyrtcJU')
