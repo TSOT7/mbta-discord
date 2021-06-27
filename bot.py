@@ -69,7 +69,7 @@ async def commands(ctx):
     embedVar.add_field(name="commands", value="Get a list of all commands", inline=False)
     await ctx.send(embed=embedVar)
 
-   @bot.event
+@bot.event
 async def on_message(message):
     if bot.user.mentioned_in(message):
         await message.channel.send("prefix is `mbta!`")
