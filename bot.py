@@ -61,7 +61,6 @@ async def getlines(ctx):
     embedVar.add_field(name="Bus", value=big_list[2], inline=False)
     await ctx.send(embed=embedVar)
 
-
 @bot.command()
 async def commands(ctx):
     embedVar = discord.Embed(title="Commands", description="List of all commands", color=6750873)
@@ -69,5 +68,10 @@ async def commands(ctx):
     embedVar.add_field(name="getlines", value="Get a list of all Commuter Rail, Metro, and Buses", inline=False)
     embedVar.add_field(name="commands", value="Get a list of all commands", inline=False)
     await ctx.send(embed=embedVar)
+
+   @bot.event
+async def on_message(message):
+    if bot.user.mentioned_in(message):
+        await message.channel.send("prefix is `mbta!`")
 
 bot.run('')
