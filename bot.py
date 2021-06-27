@@ -35,28 +35,39 @@ async def on_ready():
 
 @bot.command()
 async def info(ctx, line):
+    if line in ('Fairmount','Fitchburg','Worcester','Franklin','Greenbush','Haverhill','Kingston','Lowell','Middleborough','Needham','Newburyport','Providence'):
+        line = "CR-" + line
     data = requests.get("https://api-v3.mbta.com/routes/" + line).json()
+    stops = requests.get("https://api-v3.mbta.com/stops?filter[route]=" + line).json()
     termini = data['data']['attributes']['direction_destinations']
     direction = data['data']['attributes']['direction_names']
+    color = int(data['data']['attributes']['color'], 16)
+    a = []
+    for stop in stops['data']:
+        a.append(stop.get('attributes').get('name'))
     zipped = list(zip(termini, direction))
-    print(zipped)
-    test = "Termini: " + zipped[0][0] + " ("+zipped[0][1]+ "), " + zipped[1][0] + " ("+zipped[1][1]+")"
-    await ctx.send(test)
+    test = zipped[0][0] + " ("+zipped[0][1]+ ")\n" + zipped[1][0] + " ("+zipped[1][1]+")"
+    embedVar = discord.Embed(title= line, description="Info for " + line + " line", color=color)
+    embedVar.add_field(name="Termini", value= test, inline=False)
+    embedVar.add_field(name="Stops", value="\n".join(a), inline=False)
+    await ctx.send(embed=embedVar)
 
 @bot.command()
 async def getlines(ctx):
     big_list = (getLinesFunc())
-    embedVar = discord.Embed(title="MBTA Lines", description="All MBTA transportation lines", color=0x00ff00)
+    embedVar = discord.Embed(title="MBTA Lines", description="All MBTA transportation lines", color=6750873)
     embedVar.add_field(name="Commuter Rail", value=big_list[0], inline=False)
     embedVar.add_field(name="Metro", value=big_list[1], inline=False)
     embedVar.add_field(name="Bus", value=big_list[2], inline=False)
     await ctx.send(embed=embedVar)
 
+
 @bot.command()
 async def commands(ctx):
-    embedVar = discord.Embed(title="Commands", description="List of all commands", color=0x00ff00)
-    embedVar.add_field(name="info", value="Command to get info about a specific line", inline=False)
+    embedVar = discord.Embed(title="Commands", description="List of all commands", color=6750873)
+    embedVar.add_field(name="info + [line name]", value="Command to get info about a specific line (Commuter Rail + Metro)", inline=False)
     embedVar.add_field(name="getlines", value="Get a list of all Commuter Rail, Metro, and Buses", inline=False)
     embedVar.add_field(name="commands", value="Get a list of all commands", inline=False)
     await ctx.send(embed=embedVar)
-bot.run('ODU3ODIzODAzNzUyMDU0ODA0.YNVMrA.xPNyVaUDYmzQRkPtIBodCyrtcJU')
+
+bot.run('')
