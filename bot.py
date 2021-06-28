@@ -1,12 +1,10 @@
 import discord
 from discord.ext import commands
 import requests
+import time
 import json
-
 description = "Basic bot used to connect to MBTA."
-
 bot = commands.Bot(command_prefix='mbta!', description=description)
-
 def getLinesFunc():
     lines = requests.get("https://api-v3.mbta.com/routes/")
     linesJson = lines.json()
@@ -15,22 +13,33 @@ def getLinesFunc():
     bus = []
     for line in linesJson['data']:
         if line.get("attributes").get("description") == "Commuter Rail":
-            commuter_rail.append(line.get("attributes").get("long_name"))
+            commuter_rail.append(line.get("attributes").get("long_name") + " (ID: " + line.get("id") + ")")
         elif line.get("attributes").get("description") == "Rapid Transit":
-            metro.append(line.get("attributes").get("long_name"))
+            metro.append(line.get("attributes").get("long_name") + " (ID: " + line.get("id") + ")")
         elif line.get("attributes").get("description") == "Key Bus":
-            bus.append(line.get("attributes").get("long_name"))
+            bus.append(line.get("attributes").get("long_name") + " (ID: " + line.get("id") + ")")
     print(linesJson['data'])
     commuter_rail = "\n".join(commuter_rail)
     metro = "\n".join(metro)
     bus = "\n".join(bus)
     return [commuter_rail,metro,bus]
 
+def schedule():
+# will be implemented later, am just putting in the time to be used for future commands
+    wday = time.localtime().tm_wday
+    month = time.localtime().tm_mon
+    day = time.localtime().tm_mday
+    hr = time.localtime().tm_hour
+    min = time.localtime().tm_min
+    dst = time.localtime().tm_isdst
+    return "it's " + str(wday) + ", " + str(month) + " " + str(day) + ", " + str(hr) + ":" + str(min) + " and dst is " + str(dst)
+
 @bot.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
+    print(schedule())
     print('------')
 
 @bot.command()
@@ -45,12 +54,19 @@ async def info(ctx, line):
     a = []
     for stop in stops['data']:
         a.append(stop.get('attributes').get('name'))
+    if len("\n".join(a)) > 1024:
+        a = "Stops unavailable (Character limit exceeded!)"
+    else:
+        a = "\n".join(a)
     zipped = list(zip(termini, direction))
     test = zipped[0][0] + " ("+zipped[0][1]+ ")\n" + zipped[1][0] + " ("+zipped[1][1]+")"
-    embedVar = discord.Embed(title= line, description="Info for " + line + " line", color=color)
+    embedVar = discord.Embed(title= line, description="Information for **" + line + "** Line", color=color)
     embedVar.add_field(name="Termini", value= test, inline=False)
-    embedVar.add_field(name="Stops", value="\n".join(a), inline=False)
-    await ctx.send(embed=embedVar)
+    embedVar.add_field(name="Stops", value= a, inline=False)
+    try:
+        await ctx.send(embed=embedVar)
+    except:
+        await ctx.send("An error occurred. Please try again!")
 
 @bot.command()
 async def getlines(ctx):
@@ -68,10 +84,5 @@ async def commands(ctx):
     embedVar.add_field(name="getlines", value="Get a list of all Commuter Rail, Metro, and Buses", inline=False)
     embedVar.add_field(name="commands", value="Get a list of all commands", inline=False)
     await ctx.send(embed=embedVar)
-
-   @bot.event
-async def on_message(message):
-    if bot.user.mentioned_in(message):
-        await message.channel.send("prefix is `mbta!`")
 
 bot.run('')
