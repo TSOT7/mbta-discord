@@ -4,7 +4,7 @@ import requests
 import time
 import json
 description = "Basic bot used to connect to MBTA."
-bot = commands.Bot(command_prefix='mbta!', description=description)
+bot = commands.Bot(command_prefix='mbta!', description=description, help_command=None)
 def getLinesFunc():
     lines = requests.get("https://api-v3.mbta.com/routes/")
     linesJson = lines.json()
@@ -84,6 +84,15 @@ async def commands(ctx):
     embedVar.add_field(name="getlines", value="Get a list of all Commuter Rail, Metro, and Buses", inline=False)
     embedVar.add_field(name="commands", value="Get a list of all commands", inline=False)
     await ctx.send(embed=embedVar)
-   
-
+    
+@bot.command()
+async def lines(ctx):
+    embedVar = discord.Embed(title="Metro", description="Red \n Orange \n Blue \n green", color=0000000)
+    embedVard = discord.Embed(title="Commuter Rail", description="Fairmount \n Fitchburg \n Worcester \n Franklin \n Greenbush \n Haverhill \n Kingston \n Middleborough \n Needham \n Newburyport \n Providence \n Foxboro", color=16777215)
+    await ctx.send(embed=embedVar)
+    await ctx.send(embed=embedVard)
+    
+@bot.command()
+async def getmap(ctx):
+    await ctx.send(file=discord.File('MBTA MAP.jpg'))
 bot.run('')
