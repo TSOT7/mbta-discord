@@ -78,21 +78,33 @@ async def getlines(ctx):
     await ctx.send(embed=embedVar)
 
 @bot.command()
-async def commands(ctx):
-    embedVar = discord.Embed(title="Commands", description="List of all commands", color=6750873)
-    embedVar.add_field(name="info + [line name]", value="Command to get info about a specific line (Commuter Rail + Metro)", inline=False)
+async def help(ctx):
+    embedVar = discord.Embed(title="Help", description="List of all commands", color=6750873)
+    embedVar.add_field(name="info + [line name]",
+                       value="Command to get info about a specific line (Commuter Rail + Metro)", inline=False)
     embedVar.add_field(name="getlines", value="Get a list of all Commuter Rail, Metro, and Buses", inline=False)
-    embedVar.add_field(name="commands", value="Get a list of all commands", inline=False)
+    embedVar.add_field(name="getmap", value="Get a map of the mbta", inline=False)
+    embedVar.add_field(name="getmapCR", value="Get a map of the mbta including commuter rail", inline=False)
+    embedVar.add_field(name="metro", value="Get a list of the names of the metro lines", inline=False)
+    embedVar.add_field(name="CR", value="Get a list of the names of the Commuter Rail ", inline=False)
     await ctx.send(embed=embedVar)
     
 @bot.command()
-async def lines(ctx):
-    embedVar = discord.Embed(title="Metro", description="Red \n Orange \n Blue \n green", color=0000000)
-    embedVard = discord.Embed(title="Commuter Rail", description="Fairmount \n Fitchburg \n Worcester \n Franklin \n Greenbush \n Haverhill \n Kingston \n Middleborough \n Needham \n Newburyport \n Providence \n Foxboro", color=16777215)
+async def metro(ctx):
+    embedVar = discord.Embed(title="Metro", description="Red \n Orange \n Blue \n green", color=16777215)
     await ctx.send(embed=embedVar)
-    await ctx.send(embed=embedVard)
-    
+
+@bot.command()
+async def CR(ctx):
+    embedVar = discord.Embed(title="Commuter Rail", description="Fairmount \n Fitchburg \n Worcester \n Franklin \n Greenbush \n Haverhill \n Kingston \n Middleborough \n Needham \n Newburyport \n Providence \n Foxboro",color=16777215)
+    await ctx.send(embed=embedVar)
+
 @bot.command()
 async def getmap(ctx):
     await ctx.send(file=discord.File('MBTA MAP.jpg'))
+
+@bot.command()
+async def getmapCR(ctx):
+    await ctx.send(file=discord.File('CR MAP.png'))
+   
 bot.run('')
