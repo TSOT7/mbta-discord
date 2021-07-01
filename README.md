@@ -13,9 +13,11 @@ Intentions of this bot are not for public use developers are keeping
 
 Default prefix for the bot is 
 
-'''
+```
 mbta!
-'''
+```
+
+
 ## Commands
 
 A list of all commands 
