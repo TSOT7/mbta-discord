@@ -9,11 +9,32 @@ Intentions of this bot are not for public use developers are keeping
 ## Getting Started
 (coming soon)...
 
-## Help
+## Prefix
 
-Any advise for common problems or issues.
+Default prefix for the bot is 
+
+'''
+mbta!
+'''
+## Commands
+
+A list of all commands 
+
 ```
-command to run if program contains helper info
+mbta!commands
+
+mbta!getlines
+
+mbta!info [line/commuter rail]
+
+mbta!metro
+
+mbta!CR
+
+mbta!getmapCR
+
+mbta!getmap
+
 ```
 
 ## Authors
@@ -23,7 +44,6 @@ Contributor's Discord Usernames
 pumas#8888
 Alex967CW#3833
 qaqaqa#9157
-bkvo#0001
 Mr. Robot#4873
 
 
